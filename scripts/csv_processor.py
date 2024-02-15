@@ -52,7 +52,7 @@ def check_file_source(csv_header: [str], log_file: Logger):
     log_file.print("%% Could not find any matching header: " + str(csv_header))
 
 
-def analyze_file(file_name: str, output_file: TextIO, log_file: Logger):
+def process_file(file_name: str, output_file: TextIO, log_file: Logger):
     """ Analyzes a file, categorizes it and appends data to the output file
 
     :param file_name: File to analyze
@@ -85,7 +85,7 @@ with Logger(constant.FOLDER_LOGS) as logFile:
         for raw in raw_files:
             raw = constant.FOLDER_RAW + "/" + raw
             logFile.print("raw: " + raw)
-            analyze_file(raw, outFile, logFile)
+            process_file(raw, outFile, logFile)
 
         logFile.print("Closing output file", "info")
     logFile.print("--- Closing Log File", "info")
