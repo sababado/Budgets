@@ -2,6 +2,7 @@
 
 import constant
 import env_setup
+import logger
 from datetime import datetime
 
 env_setup.init()
@@ -24,7 +25,10 @@ def get_output_file(output_folder_name: str, date: datetime):
 # Process file based on type and append to output file
 
 now = datetime.now()
-with get_output_file(constant.FOLDER_OUTPUT, now) as outFile:
-    print("Got file")
-    outFile.write(now.strftime('%d-%m-%Y, %H-%M-%S') + "\n")
-    print("done with file")
+with logger.Logger(constant.FOLDER_LOGS) as logFile:
+    logFile.print("opening output file")
+    with get_output_file(constant.FOLDER_OUTPUT, now) as outFile:
+        print("Got file")
+        outFile.write(now.strftime('%d-%m-%Y, %H-%M-%S') + "\n")
+        print("done with file")
+    logFile.print("done with output file")

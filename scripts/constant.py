@@ -2,6 +2,7 @@
 
 # folder names relative to this script
 
-FOLDER_RAW = "raw"
-FOLDER_OUTPUT = "output"
-FOLDER_LOGS = "logs"
+FOLDER_DATA = "../data"
+FOLDER_RAW = "../data/raw"
+FOLDER_OUTPUT = "../data/output"
+FOLDER_LOGS = "../data/logs"
