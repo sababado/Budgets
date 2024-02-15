@@ -26,9 +26,9 @@ def get_output_file(output_folder_name: str, date: datetime):
 
 now = datetime.now()
 with logger.Logger(constant.FOLDER_LOGS) as logFile:
-    logFile.print("opening output file")
+    logFile.print("Log file opened", "info")
     with get_output_file(constant.FOLDER_OUTPUT, now) as outFile:
-        print("Got file")
+        logFile.print("Got file")
         outFile.write(now.strftime('%d-%m-%Y, %H-%M-%S') + "\n")
-        print("done with file")
-    logFile.print("done with output file")
+        logFile.print("done with file")
+    logFile.print("--- Closing Log File", "info")
