@@ -1,14 +1,11 @@
 # csv processor
+import csv
 import os
+from datetime import datetime
 from typing import TextIO
 
-import constant
-import csv
-import env_setup
-from logger import Logger
-from datetime import datetime
-
-env_setup.init()
+from bank_file_compiler import constant
+from bank_file_compiler.logger import Logger
 
 
 # get all raw files
@@ -37,7 +34,7 @@ def get_output_file(output_folder_name: str, date: datetime):
             return open(file_name, 'a')
 
 
-def check_file_source(csv_header: [str], file_name: str, log_file: Logger):
+def determine_bank_type(csv_header: [str], file_name: str, log_file: Logger):
     """ Checks which type of account this file is from.
     :param log_file: The logger to log to.
     :param file_name: File name.
@@ -51,16 +48,21 @@ def check_file_source(csv_header: [str], file_name: str, log_file: Logger):
         if header_values == csv_header:
             if header == constant.HEADER_TYPE_USAA:
                 if file_name.lower().__contains__("savings"):
-                    found_header = constant.FILE_TYPE_USAA_SAVING
+                    found_header = constant.FILE_TYPE_USAA_SAVINGS
                 else:
                     found_header = constant.FILE_TYPE_USAA_CHECKING
 
             log_file.print("%% Found header: " + found_header)
             return found_header
-    log_file.print("%% Could not find any matching header: " + str(csv_header))
+    log_file.print("%% Could not find any matching header: " + str(csv_header), 'error')
 
 
-def process_file_usaa(row: list[str], bank_type: str, output_file: TextIO, log_file: Logger):
+def transform_bank_data_usaa(row: list[str], usaa_bank_type: str):
+    """ Specific processing of bank data from USAA files. Checking and Savings statements are the same.
+    :param row: row of bank data
+    :param usaa_bank_type: USAA bank type
+    :return: String of transformed data.
+    """
     amount = float(row[4])
     debit_credit_val: str = ''
     if amount < 0:
@@ -68,8 +70,29 @@ def process_file_usaa(row: list[str], bank_type: str, output_file: TextIO, log_f
     else:
         debit_credit_val = "," + str(amount)
 
-    output_file.write("%s,%s,%s,%s,%s,,\n"
-                      % (row[0], bank_type, row[2], row[3], debit_credit_val))
+    return str.format("%s,%s,%s,%s,%s,,"
+                      % (row[0], usaa_bank_type, row[2], row[3], debit_credit_val))
+
+
+def transform_bank_data(bank_type, log_file, row):
+    # Act on the bank type
+    log_file.print("%-- Processing row: " + bank_type + ": " + str(row))
+    # Capital One
+    if bank_type == constant.FILE_TYPE_CAPITALONE:
+        return str.format("%s,%s,%s,%s,%s,,"
+                          % (row[0], row[2], row[3], row[4], row[5]))
+    # NFCU
+    elif bank_type == constant.FILE_TYPE_NFCU:
+        return str.format("%s,%s,%s,,%s,%s,,"
+                          % (row[0], bank_type, row[2], row[3], row[4]))
+    # USAA
+    elif bank_type == constant.FILE_TYPE_USAA_CHECKING or bank_type == constant.FILE_TYPE_USAA_SAVINGS:
+        return transform_bank_data_usaa(row, bank_type)
+    # Uh Oh
+    else:
+        message: str = "****** Unsupported Bank Type: " + bank_type
+        log_file.print(message)
+        raise NotImplementedError(message)
 
 
 def process_file(file_name: str, output_file: TextIO, log_file: Logger):
@@ -90,42 +113,7 @@ def process_file(file_name: str, output_file: TextIO, log_file: Logger):
             # Find the bank type
             if bank_type == '':
                 log_file.print("% No bank type yet... Checking: " + row.__str__())
-                bank_type = check_file_source(row, file_name, log_file)
+                bank_type = determine_bank_type(row, file_name, log_file)
                 log_file.print("% Found bank type: " + str(bank_type), "info")
             else:
-                # Act on the bank type
-                log_file.print("%-- Processing row: " + bank_type + ": " + str(row))
-                # Capital One
-                if bank_type == constant.FILE_TYPE_CAPITALONE:
-                    output_file.write("%s,%s,%s,%s,%s,,\n"
-                                      % (row[0], row[2], row[3], row[4], row[5]))
-
-                # NFCU
-                if bank_type == constant.FILE_TYPE_NFCU:
-                    output_file.write("%s,%s,%s,,%s,%s,,\n"
-                                      % (row[0], bank_type, row[2], row[3], row[4]))
-                # USAA
-                if bank_type == constant.FILE_TYPE_USAA_CHECKING or bank_type == constant.FILE_TYPE_USAA_SAVING:
-                    process_file_usaa(row, bank_type, output_file, log_file)
-                # Uh Oh
-                else:
-                    log_file.print("^&^&^&^&^^&No bank type found for this row")
-
-
-now = datetime.now()
-with Logger(constant.FOLDER_LOGS) as logFile:
-    logFile.print("******* Starting CSV processing *******", "info")
-    logFile.print("Log file opened", "info")
-    with get_output_file(constant.FOLDER_OUTPUT, now) as outFile:
-        logFile.print("Got output file", "info")
-
-        # get files in raw folder
-        raw_files = os.listdir(constant.FOLDER_RAW)
-        logFile.print("Got raw files: " + str(raw_files))
-        for raw in raw_files:
-            raw = constant.FOLDER_RAW + "/" + raw
-            logFile.print("raw: " + raw)
-            process_file(raw, outFile, logFile)
-
-        logFile.print("Closing output file", "info")
-    logFile.print("--- Closing Log File", "info")
+                output_file.write(transform_bank_data(bank_type, log_file, row) + "\n")

@@ -1,9 +1,9 @@
 # Ensures the environment is setup right
-import sys
-
-import constant
 import os
+import sys
 from pathlib import Path
+
+from bank_file_compiler import constant
 
 
 def check_or_create_35_up(folder_name: str):

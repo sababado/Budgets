@@ -10,12 +10,17 @@ FOLDER_LOGS = "../data/logs"
 
 HEADER_TYPE_USAA: str = "USAA"
 FILE_TYPE_USAA_CHECKING: str = "USAA Checking"
-FILE_TYPE_USAA_SAVING: str = "USAA Savings"
+FILE_TYPE_USAA_SAVINGS: str = "USAA Savings"
 FILE_TYPE_NFCU: str = "NFCU"
 FILE_TYPE_CAPITALONE: str = "CapitalOne"
 FILE_TYPE_CASH: str = "Cash"
 
-_FILE_TYPES = Literal[FILE_TYPE_USAA_CHECKING, FILE_TYPE_USAA_SAVING, FILE_TYPE_CAPITALONE, FILE_TYPE_NFCU, FILE_TYPE_CASH]
+_FILE_TYPES = Literal[
+              FILE_TYPE_USAA_CHECKING:str,
+              FILE_TYPE_USAA_SAVINGS,
+              FILE_TYPE_CAPITALONE,
+              FILE_TYPE_NFCU,
+              FILE_TYPE_CASH]
 
 CSV_OUTPUT_HEADER = "Date,Method,Description,Category,Debit,Credit,Notes,Business or Personal"
 
