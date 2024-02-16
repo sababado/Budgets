@@ -39,15 +39,47 @@ def test_determine_bank_type_exception(csv_header: [str], file_name: str, expect
         assert csv_processor.determine_bank_type(csv_header, file_name, Logger()) is not None
 
 
-@pytest.mark.parametrize("row,usaa_bank_type,expected_output",
+usaa_test_data = [
+    (["2024-02-07", "Capital One", "CAPITAL ONE      MOBILE PMT ***********LHH8",
+      "Credit Card Payment", "-4500.00", "Posted"],
+     constant.FILE_TYPE_USAA_CHECKING,
+     "2024-02-07," + constant.FILE_TYPE_USAA_CHECKING + ",CAPITAL ONE      MOBILE PMT ***********LHH8,Credit Card Payment,4500.0,,,"),
+    (["2025-02-07", "Capital One", "Orig Desc", "Payment", "500.00", "Posted"],
+     constant.FILE_TYPE_USAA_SAVINGS,
+     "2025-02-07," + constant.FILE_TYPE_USAA_SAVINGS + ",Orig Desc,Payment,,500.0,,"),
+]
+nfcu_test_data = [
+    (["1/2/2024", "", "GOOGLE GSUITE SZA", "6.40", ""],
+     constant.FILE_TYPE_NFCU,
+     "2024-02-01," + constant.FILE_TYPE_NFCU + ",GOOGLE GSUITE SZA,,6.40,,,"),
+]
+capitalone_test_data = [
+    (["2024-02-07", "2024-02-09", "7278", "WENDY'S", "Dining", "13.52", ""],
+     constant.FILE_TYPE_CAPITALONE,
+     "2024-02-07,7278,WENDY'S,Dining,13.52,,"),
+]
+
+
+@pytest.mark.parametrize("row,bank_type,expected_output", usaa_test_data)
+def test_transform_bank_data_usaa(row: [str], bank_type: str, expected_output: str):
+    assert csv_processor.transform_bank_data_usaa(row, bank_type) == expected_output
+
+
+@pytest.mark.parametrize("row,bank_type,expected_output", usaa_test_data + nfcu_test_data + capitalone_test_data)
+def test_transform_bank_data(row: [str], bank_type: str, expected_output: str):
+    assert csv_processor.transform_bank_data(row, bank_type, Logger()) == expected_output
+
+
+@pytest.mark.parametrize("row,bank_type,expectation",
                          [
                              (["2024-02-07", "Capital One", "CAPITAL ONE      MOBILE PMT ***********LHH8",
                                "Credit Card Payment", "-4500.00", "Posted"],
                               constant.FILE_TYPE_USAA_CHECKING,
-                              "2024-02-07," + constant.FILE_TYPE_USAA_CHECKING + ",CAPITAL ONE      MOBILE PMT ***********LHH8,Credit Card Payment,4500.0,,,"),
+                              does_not_raise()),
                              (["2025-02-07", "Capital One", "Orig Desc", "Payment", "500.00", "Posted"],
-                              constant.FILE_TYPE_USAA_SAVINGS,
-                              "2025-02-07," + constant.FILE_TYPE_USAA_SAVINGS + ",Orig Desc,Payment,,500.0,,"),
+                              "Unsupported Bank Type",
+                              pytest.raises(Exception)),
                          ])
-def test_transform_bank_data_usaa(row: [str], usaa_bank_type: str, expected_output: str):
-    assert csv_processor.transform_bank_data_usaa(row, usaa_bank_type) == expected_output
+def test_transform_bank_data_error(row: [str], bank_type: str, expectation):
+    with expectation:
+        assert csv_processor.transform_bank_data(row, bank_type, Logger()) is not None

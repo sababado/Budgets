@@ -74,7 +74,7 @@ def transform_bank_data_usaa(row: list[str], usaa_bank_type: str):
                       % (row[0], usaa_bank_type, row[2], row[3], debit_credit_val))
 
 
-def transform_bank_data(bank_type, log_file, row):
+def transform_bank_data(row, bank_type, log_file):
     # Act on the bank type
     log_file.print("%-- Processing row: " + bank_type + ": " + str(row))
     # Capital One
@@ -83,16 +83,16 @@ def transform_bank_data(bank_type, log_file, row):
                           % (row[0], row[2], row[3], row[4], row[5]))
     # NFCU
     elif bank_type == constant.FILE_TYPE_NFCU:
+        date: str = (datetime.strptime(row[0], '%d/%m/%Y')
+                     .strftime("%Y-%m-%d"))
         return str.format("%s,%s,%s,,%s,%s,,"
-                          % (row[0], bank_type, row[2], row[3], row[4]))
+                          % (date, bank_type, row[2], row[3], row[4]))
     # USAA
     elif bank_type == constant.FILE_TYPE_USAA_CHECKING or bank_type == constant.FILE_TYPE_USAA_SAVINGS:
         return transform_bank_data_usaa(row, bank_type)
     # Uh Oh
     else:
-        message: str = "****** Unsupported Bank Type: " + bank_type
-        log_file.print(message)
-        raise NotImplementedError(message)
+        log_file.print("****** Unsupported Bank Type: " + bank_type, 'error')
 
 
 def process_file(file_name: str, output_file: TextIO, log_file: Logger):
@@ -116,4 +116,4 @@ def process_file(file_name: str, output_file: TextIO, log_file: Logger):
                 bank_type = determine_bank_type(row, file_name, log_file)
                 log_file.print("% Found bank type: " + str(bank_type), "info")
             else:
-                output_file.write(transform_bank_data(bank_type, log_file, row) + "\n")
+                output_file.write(transform_bank_data(row, bank_type, log_file) + "\n")
