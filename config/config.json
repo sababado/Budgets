@@ -13,6 +13,8 @@
     "Wixcom Payout": "Income"
   },
   "businessOrPersonalMap": {
+    "ADOBE INC.": "Szabo Woodworks",
+    "ADOBE  *CREATIVE CLOUD": "Szabo Woodworks",
     "ATM Fee Rebate": "Personal",
     "GOOGLE GSUITE SZA": "Szabo Woodworks",
     "JP Morgan Chase": "Personal",

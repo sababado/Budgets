@@ -69,8 +69,10 @@ def determine_bank_type(csv_header: [str], file_name: str, log_file: Logger):
         found_header: str = header
         if header_values == csv_header:
             if header == constant.HEADER_TYPE_USAA:
-                if file_name.lower().__contains__("savings"):
+                if "savings" in file_name.lower():
                     found_header = constant.FILE_TYPE_USAA_SAVINGS
+                elif "credit" in file_name.lower():
+                    found_header = constant.FILE_TYPE_USAA_CREDIT
                 else:
                     found_header = constant.FILE_TYPE_USAA_CHECKING
 
@@ -120,7 +122,7 @@ def transform_bank_data(row, bank_type, log_file):
         return str.format("%s,%s,%s,%s,%s,%s,,%s"
                           % (date, bank_type, row[2], category, row[3], row[4], expense_type))
     # USAA
-    elif bank_type == constant.FILE_TYPE_USAA_CHECKING or bank_type == constant.FILE_TYPE_USAA_SAVINGS:
+    elif bank_type == constant.FILE_TYPE_USAA_CHECKING or bank_type == constant.FILE_TYPE_USAA_SAVINGS or bank_type == constant.FILE_TYPE_USAA_CREDIT:
         return transform_bank_data_usaa(row, bank_type)
     # Uh Oh
     else:

@@ -1,6 +1,6 @@
 # constants
-from typing import Literal
 import json
+from typing import Literal
 
 # folder names relative to this script
 
@@ -13,12 +13,14 @@ DEFAULT_CONFIG_FILE = "../config/config.json"
 HEADER_TYPE_USAA: str = "USAA"
 FILE_TYPE_USAA_CHECKING: str = "USAA Checking"
 FILE_TYPE_USAA_SAVINGS: str = "USAA Savings"
+FILE_TYPE_USAA_CREDIT: str = "USAA Credit"
 FILE_TYPE_NFCU: str = "NFCU"
 FILE_TYPE_CAPITALONE: str = "CapitalOne"
 FILE_TYPE_CASH: str = "Cash"
 
 _FILE_TYPES = Literal[
               FILE_TYPE_USAA_CHECKING:str,
+              FILE_TYPE_USAA_CREDIT,
               FILE_TYPE_USAA_SAVINGS,
               FILE_TYPE_CAPITALONE,
               FILE_TYPE_NFCU,

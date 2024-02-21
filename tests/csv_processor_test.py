@@ -25,6 +25,8 @@ def test_map_description(description, expected_output):
                              (["Date", "Description", "Original Description", "Category", "Amount", "Status"],
                               "usaa savings.csv", constant.FILE_TYPE_USAA_SAVINGS),
                              (["Date", "Description", "Original Description", "Category", "Amount", "Status"],
+                              "usaa credit.csv", constant.FILE_TYPE_USAA_CREDIT),
+                             (["Date", "Description", "Original Description", "Category", "Amount", "Status"],
                               "savings.csv", constant.FILE_TYPE_USAA_SAVINGS),
                              (["Transaction Date", "Posted Date", "Card No.", "Description", "Category", "Debit",
                                "Credit"],
@@ -59,6 +61,9 @@ usaa_test_data = [
     (["2025-02-07", "Some Desc", "Stowbird Storage Description", "Payment", "500.00", "Posted"],
      constant.FILE_TYPE_USAA_SAVINGS,
      "2025-02-07," + constant.FILE_TYPE_USAA_SAVINGS + ",Stowbird Storage Description,Rent,,500.0,,Personal"),
+    (["2025-02-07", "Some Desc", "Stowbird Storage Description", "Payment", "500.00", "Posted"],
+     constant.FILE_TYPE_USAA_CREDIT,
+     "2025-02-07," + constant.FILE_TYPE_USAA_CREDIT + ",Stowbird Storage Description,Rent,,500.0,,Personal"),
 ]
 nfcu_test_data = [
     (["1/2/2024", "", "GOOGLE GSUITE SZA", "6.40", ""],
@@ -72,9 +77,11 @@ capitalone_test_data = [
     (["2024-02-07", "2024-02-09", "7278", "WENDY'S", "Dining", "13.52", ""],
      constant.FILE_TYPE_CAPITALONE,
      "2024-02-07,7278,WENDY'S,Dining,13.52,,,"),
-    (["2024-02-07", "2024-02-09", "7278", "VAED TREAS 310 Long BS String", "VAED TREAS 310 Long BS String", "13.52", ""],
-     constant.FILE_TYPE_CAPITALONE,
-     "2024-02-07,7278,VAED TREAS 310 Long BS String,VA GI Bill,13.52,,,Personal"),
+    (
+        ["2024-02-07", "2024-02-09", "7278", "VAED TREAS 310 Long BS String", "VAED TREAS 310 Long BS String", "13.52",
+         ""],
+        constant.FILE_TYPE_CAPITALONE,
+        "2024-02-07,7278,VAED TREAS 310 Long BS String,VA GI Bill,13.52,,,Personal"),
 ]
 
 
