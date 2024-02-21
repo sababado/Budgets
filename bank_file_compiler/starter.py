@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 import constant
-import bank_file_compiler
+from bank_file_compiler import csv_processor
 import env_setup
 from logger import Logger
 
@@ -13,7 +13,7 @@ def run_processor():
     with Logger(constant.FOLDER_LOGS) as logFile:
         logFile.print("******* Starting CSV processing *******", "info")
         logFile.print("Log file opened", "info")
-        with bank_file_compiler.get_output_file(constant.FOLDER_OUTPUT, now) as outFile:
+        with csv_processor.get_output_file(constant.FOLDER_OUTPUT, now) as outFile:
             logFile.print("Got output file", "info")
 
             # get files in raw folder
@@ -22,7 +22,7 @@ def run_processor():
             for raw in raw_files:
                 raw = constant.FOLDER_RAW + "/" + raw
                 logFile.print("raw: " + raw)
-                bank_file_compiler.process_file(raw, outFile, logFile)
+                csv_processor.process_file(raw, outFile, logFile)
 
             logFile.print("Closing output file", "info")
         logFile.print("--- Closing Log File", "info")

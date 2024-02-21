@@ -1,0 +1,27 @@
+{
+  "categoryMap": {
+    "ATM Fee Rebate": "Refund",
+    "GOOGLE GSUITE SZA": "Fees",
+    "JP Morgan Chase": "Mortgage Payment",
+    "KING SOOPERS": "Groceries",
+    "SAFEWAY": "Groceries",
+    "Stowbird Storage": "Rent",
+    "VAED TREAS 310": "VA GI Bill",
+    "VACP TREAS 310": "VA Disability",
+    "USAA FUNDS TRANSFER": "Transfer",
+    "USAA P&C         REFUND": "Refund",
+    "Wixcom Payout": "Income"
+  },
+  "businessOrPersonalMap": {
+    "ATM Fee Rebate": "Personal",
+    "GOOGLE GSUITE SZA": "Szabo Woodworks",
+    "JP Morgan Chase": "Personal",
+    "HUM COMPBEN E MER": "Personal",
+    "KING SOOPERS": "Personal",
+    "Stowbird Storage": "Personal",
+    "VAED TREAS 310": "Personal",
+    "VACP TREAS 310": "Personal",
+    "USAA FUNDS TRANSFER": "Personal",
+    "Wixcom Payout": "Szabo Woodworks"
+  }
+}

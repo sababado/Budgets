@@ -6,6 +6,15 @@ from bank_file_compiler import csv_processor, constant
 from bank_file_compiler.logger import Logger
 
 
+@pytest.mark.parametrize("description,expected_output",
+                         [
+                             ("Nothing description doesnt exist", ("", "")),
+                             ("ATM Fee Rebate", ("Refund", "Personal"))
+                         ])
+def test_map_description(description, expected_output):
+    assert csv_processor.map_description(description) == expected_output
+
+
 @pytest.mark.parametrize("csv_header,file_name,expected_output",
                          [
                              (["Transaction Date", "Posted Date", "Card No.", "Description", "Category", "Debit",
@@ -47,16 +56,25 @@ usaa_test_data = [
     (["2025-02-07", "Capital One", "Orig Desc", "Payment", "500.00", "Posted"],
      constant.FILE_TYPE_USAA_SAVINGS,
      "2025-02-07," + constant.FILE_TYPE_USAA_SAVINGS + ",Orig Desc,Payment,,500.0,,"),
+    (["2025-02-07", "Some Desc", "Stowbird Storage Description", "Payment", "500.00", "Posted"],
+     constant.FILE_TYPE_USAA_SAVINGS,
+     "2025-02-07," + constant.FILE_TYPE_USAA_SAVINGS + ",Stowbird Storage Description,Rent,,500.0,,Personal"),
 ]
 nfcu_test_data = [
     (["1/2/2024", "", "GOOGLE GSUITE SZA", "6.40", ""],
      constant.FILE_TYPE_NFCU,
-     "2024-02-01," + constant.FILE_TYPE_NFCU + ",GOOGLE GSUITE SZA,,6.40,,,"),
+     "2024-01-02," + constant.FILE_TYPE_NFCU + ",GOOGLE GSUITE SZA,Fees,6.40,,,Szabo Woodworks"),
+    (["1/2/2024", "", "Some random Expense", "6.40", ""],
+     constant.FILE_TYPE_NFCU,
+     "2024-01-02," + constant.FILE_TYPE_NFCU + ",Some random Expense,,6.40,,,"),
 ]
 capitalone_test_data = [
     (["2024-02-07", "2024-02-09", "7278", "WENDY'S", "Dining", "13.52", ""],
      constant.FILE_TYPE_CAPITALONE,
-     "2024-02-07,7278,WENDY'S,Dining,13.52,,"),
+     "2024-02-07,7278,WENDY'S,Dining,13.52,,,"),
+    (["2024-02-07", "2024-02-09", "7278", "VAED TREAS 310 Long BS String", "VAED TREAS 310 Long BS String", "13.52", ""],
+     constant.FILE_TYPE_CAPITALONE,
+     "2024-02-07,7278,VAED TREAS 310 Long BS String,VA GI Bill,13.52,,,Personal"),
 ]
 
 

@@ -8,6 +8,28 @@ from bank_file_compiler import constant
 from bank_file_compiler.logger import Logger
 
 
+def map_description(description: str):
+    """ Given a description, map to an appropriate category and expense type (business or personal)
+
+    :param description: Description to check
+    :return: category, expense type
+    """
+    return_category = ""
+    return_expense_type = ""
+
+    # Check categories
+    for desc, category in constant.MAP_CATEGORY.items():
+        if desc in description:
+            return_category = category
+
+    # Check expense types
+    for desc, expense_type in constant.MAP_BUSINESS_OR_PERSONAL.items():
+        if desc in description:
+            return_expense_type = expense_type
+
+    return return_category, return_expense_type
+
+
 # get all raw files
 # determine file type (USAA, Cap1, NFCU)
 # Process file based on type and append to output file
@@ -64,29 +86,39 @@ def transform_bank_data_usaa(row: list[str], usaa_bank_type: str):
     :return: String of transformed data.
     """
     amount = float(row[4])
-    debit_credit_val: str = ''
     if amount < 0:
         debit_credit_val = str(abs(amount)) + ","
     else:
         debit_credit_val = "," + str(amount)
 
-    return str.format("%s,%s,%s,%s,%s,,"
-                      % (row[0], usaa_bank_type, row[2], row[3], debit_credit_val))
+    description = row[2]
+    category, expense_type = map_description(description)
+    if not category:
+        category = row[3]
+    return str.format("%s,%s,%s,%s,%s,,%s"
+                      % (row[0], usaa_bank_type, description, category, debit_credit_val, expense_type))
 
 
 def transform_bank_data(row, bank_type, log_file):
     # Act on the bank type
     log_file.print("%-- Processing row: " + bank_type + ": " + str(row))
+
     # Capital One
     if bank_type == constant.FILE_TYPE_CAPITALONE:
-        return str.format("%s,%s,%s,%s,%s,,"
-                          % (row[0], row[2], row[3], row[4], row[5]))
+        description = row[3]
+        category, expense_type = map_description(description)
+        if not category:
+            category = row[4]
+        return str.format("%s,%s,%s,%s,%s,,,%s"
+                          % (row[0], row[2], row[3], category, row[5], expense_type))
     # NFCU
     elif bank_type == constant.FILE_TYPE_NFCU:
-        date: str = (datetime.strptime(row[0], '%d/%m/%Y')
+        description = row[2]
+        category, expense_type = map_description(description)
+        date: str = (datetime.strptime(row[0], '%m/%d/%Y')
                      .strftime("%Y-%m-%d"))
-        return str.format("%s,%s,%s,,%s,%s,,"
-                          % (date, bank_type, row[2], row[3], row[4]))
+        return str.format("%s,%s,%s,%s,%s,%s,,%s"
+                          % (date, bank_type, row[2], category, row[3], row[4], expense_type))
     # USAA
     elif bank_type == constant.FILE_TYPE_USAA_CHECKING or bank_type == constant.FILE_TYPE_USAA_SAVINGS:
         return transform_bank_data_usaa(row, bank_type)
@@ -103,8 +135,8 @@ def process_file(file_name: str, output_file: TextIO, log_file: Logger):
     :param log_file: The logger to log to
     """
     log_file.print("% Analyzing file: " + file_name)
-    with open(file_name, 'r') as file:
-        csv_reader = csv.reader(file, delimiter=',')
+    with open(file_name, 'r') as bank_file:
+        csv_reader = csv.reader(bank_file, delimiter=',')
         bank_type = ''
         # Determine bank type
         for row in csv_reader:

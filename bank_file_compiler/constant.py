@@ -1,5 +1,6 @@
 # constants
 from typing import Literal
+import json
 
 # folder names relative to this script
 
@@ -7,6 +8,7 @@ FOLDER_DATA = "../data"
 FOLDER_RAW = "../data/raw"
 FOLDER_OUTPUT = "../data/output"
 FOLDER_LOGS = "../data/logs"
+DEFAULT_CONFIG_FILE = "../config/config.json"
 
 HEADER_TYPE_USAA: str = "USAA"
 FILE_TYPE_USAA_CHECKING: str = "USAA Checking"
@@ -34,3 +36,8 @@ HEADERS = {
     FILE_TYPE_NFCU: HEADER_NFCU,
     HEADER_TYPE_USAA: HEADER_USAA
 }
+
+with open(DEFAULT_CONFIG_FILE, 'r') as config_file:
+    config_file = json.load(config_file)
+    MAP_CATEGORY = config_file["categoryMap"]
+    MAP_BUSINESS_OR_PERSONAL = config_file["businessOrPersonalMap"]
