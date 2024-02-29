@@ -111,8 +111,8 @@ def transform_bank_data(row, bank_type, log_file):
         category, expense_type = map_description(description)
         if not category:
             category = row[4]
-        return str.format("%s,%s,%s,%s,%s,,,%s"
-                          % (row[0], row[2], row[3], category, row[5], expense_type))
+        return str.format("%s,%s,%s,%s,%s,%s,,%s"
+                          % (row[0], row[2], row[3], category, row[5], row[6], expense_type))
     # NFCU
     elif bank_type == constant.FILE_TYPE_NFCU:
         description = row[2]

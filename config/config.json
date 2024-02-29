@@ -1,6 +1,8 @@
 {
   "categoryMap": {
     "ATM Fee Rebate": "Refund",
+    "ATM REBATE": "Refund",
+    "COMCAST": "Utilities",
     "GOOGLE GSUITE SZA": "Fees",
     "JP Morgan Chase": "Mortgage Payment",
     "KING SOOPERS": "Groceries",
@@ -16,6 +18,8 @@
     "ADOBE INC.": "Szabo Woodworks",
     "ADOBE  *CREATIVE CLOUD": "Szabo Woodworks",
     "ATM Fee Rebate": "Personal",
+    "ATM REBATE": "Personal",
+    "COMCAST": "Personal",
     "GOOGLE GSUITE SZA": "Szabo Woodworks",
     "JP Morgan Chase": "Personal",
     "HUM COMPBEN E MER": "Personal",

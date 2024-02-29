@@ -77,6 +77,9 @@ capitalone_test_data = [
     (["2024-02-07", "2024-02-09", "7278", "WENDY'S", "Dining", "13.52", ""],
      constant.FILE_TYPE_CAPITALONE,
      "2024-02-07,7278,WENDY'S,Dining,13.52,,,"),
+    (["2024-02-27", "2024-02-27", "7278", "Some Thing", "P/C", "", "666.66"],
+     constant.FILE_TYPE_CAPITALONE,
+     "2024-02-27,7278,Some Thing,P/C,,666.66,,"),
     (
         ["2024-02-07", "2024-02-09", "7278", "VAED TREAS 310 Long BS String", "VAED TREAS 310 Long BS String", "13.52",
          ""],
