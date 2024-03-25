@@ -43,7 +43,7 @@ def get_output_file(output_folder_name: str, date: datetime):
     :return: File to work with. Should be closed when done.
     """
     with Logger(constant.FOLDER_LOGS) as log_file:
-        file_name = output_folder_name + '/' + date.strftime('%d-%m-%Y.csv')
+        file_name = output_folder_name + '/' + date.strftime('%m-%d-%Y.csv')
 
         log_file.print("#Output file name: " + file_name)
         if not os.path.exists(file_name):
