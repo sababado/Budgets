@@ -54,7 +54,7 @@ usaa_test_data = [
     (["2024-02-07", "Capital One", "CAPITAL ONE      MOBILE PMT ***********LHH8",
       "Credit Card Payment", "-4500.00", "Posted"],
      constant.FILE_TYPE_USAA_CHECKING,
-     "2024-02-07," + constant.FILE_TYPE_USAA_CHECKING + ",CAPITAL ONE      MOBILE PMT ***********LHH8,Credit Card Payment,4500.0,,,"),
+     "2024-02-07," + constant.FILE_TYPE_USAA_CHECKING + ",CAPITAL ONE      MOBILE PMT ***********LHH8,Credit Card Payment,4500.0,,,Personal"),
     (["2025-02-07", "Capital One", "Orig Desc", "Payment", "500.00", "Posted"],
      constant.FILE_TYPE_USAA_SAVINGS,
      "2025-02-07," + constant.FILE_TYPE_USAA_SAVINGS + ",Orig Desc,Payment,,500.0,,"),

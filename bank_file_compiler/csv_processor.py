@@ -81,7 +81,7 @@ def determine_bank_type(csv_header: [str], file_name: str, log_file: Logger):
     log_file.print("%% Could not find any matching header: " + str(csv_header), 'error')
 
 
-def transform_bank_data_usaa(row: list[str], usaa_bank_type: str):
+def transform_bank_data_usaa(row: list, usaa_bank_type: str):
     """ Specific processing of bank data from USAA files. Checking and Savings statements are the same.
     :param row: row of bank data
     :param usaa_bank_type: USAA bank type
