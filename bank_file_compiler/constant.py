@@ -29,7 +29,7 @@ _FILE_TYPES = Literal[
 CSV_OUTPUT_HEADER = "Date,Method,Description,Category,Debit,Credit,Notes,Business or Personal"
 
 HEADER_CAPITALONE: str = "Transaction Date,Posted Date,Card No.,Description,Category,Debit,Credit"
-HEADER_NFCU: str = "Date,No.,Description,Debit,Credit"
+HEADER_NFCU: str = "Posting Date,Transaction Date,Amount,Credit Debit Indicator,type,Type Group,Reference,Instructed Currency,Currency Exchange Rate,Instructed Amount,Description,Category,Check Serial Number,Card Ending"
 HEADER_USAA: str = "Date,Description,Original Description,Category,Amount,Status"
 
 # This should always contain all the header types.

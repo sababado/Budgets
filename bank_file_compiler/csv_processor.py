@@ -112,15 +112,18 @@ def transform_bank_data(row, bank_type, log_file):
         if not category:
             category = row[4]
         return str.format("%s,%s,%s,%s,%s,%s,,%s"
-                          % (row[0], row[2], row[3], category, row[5], row[6], expense_type))
+                          % (row[0], row[2], description, category, row[5], row[6], expense_type))
     # NFCU
     elif bank_type == constant.FILE_TYPE_NFCU:
-        description = row[2]
+        description = row[10]
         category, expense_type = map_description(description)
-        date: str = (datetime.strptime(row[0], '%m/%d/%Y')
+        debit_credit_indicator = row[3]
+        debit = row[2] if debit_credit_indicator == "Debit" else ""
+        credit = row[2] if debit_credit_indicator == "Credit" else ""
+        date: str = (datetime.strptime(row[1], '%m/%d/%y')
                      .strftime("%Y-%m-%d"))
         return str.format("%s,%s,%s,%s,%s,%s,,%s"
-                          % (date, bank_type, row[2], category, row[3], row[4], expense_type))
+                          % (date, bank_type, description, category, debit, credit, expense_type))
     # USAA
     elif bank_type == constant.FILE_TYPE_USAA_CHECKING or bank_type == constant.FILE_TYPE_USAA_SAVINGS or bank_type == constant.FILE_TYPE_USAA_CREDIT:
         return transform_bank_data_usaa(row, bank_type)

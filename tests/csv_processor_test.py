@@ -31,7 +31,7 @@ def test_map_description(description, expected_output):
                              (["Transaction Date", "Posted Date", "Card No.", "Description", "Category", "Debit",
                                "Credit"],
                               "savings.csv", constant.FILE_TYPE_CAPITALONE),
-                             (["Date", "No.", "Description", "Debit", "Credit"],
+                             (["Posting Date","Transaction Date","Amount","Credit Debit Indicator","type","Type Group","Reference","Instructed Currency","Currency Exchange Rate","Instructed Amount","Description","Category","Check Serial Number","Card Ending"],
                               "transactions.csv", constant.FILE_TYPE_NFCU),
                          ])
 def test_determine_bank_type(csv_header: [str], file_name: str, expected_output: str):
@@ -66,12 +66,12 @@ usaa_test_data = [
      "2025-02-07," + constant.FILE_TYPE_USAA_CREDIT + ",Stowbird Storage Description,Rent,,500.0,,Personal"),
 ]
 nfcu_test_data = [
-    (["1/2/2024", "", "GOOGLE GSUITE SZA", "6.40", ""],
+    (["1/29/25","1/27/25","100","Debit","POS","POS","","","","","DEBIT-BDC 6187 AAW SAINT PAUL MN","Other Expenses","",""],
      constant.FILE_TYPE_NFCU,
-     "2024-01-02," + constant.FILE_TYPE_NFCU + ",GOOGLE GSUITE SZA,Fees,6.40,,,Szabo Woodworks"),
-    (["1/2/2024", "", "Some random Expense", "6.40", ""],
+     "2025-01-27," + constant.FILE_TYPE_NFCU + ",DEBIT-BDC 6187 AAW SAINT PAUL MN,Fees,100,,,Szabo Woodworks"),
+    (["1/27/25","1/27/25","750","Credit","Transfer","Transfer","","","","","Transfer From Robert J Szabo -5818","Transfers","",""],
      constant.FILE_TYPE_NFCU,
-     "2024-01-02," + constant.FILE_TYPE_NFCU + ",Some random Expense,,6.40,,,"),
+     "2025-01-27," + constant.FILE_TYPE_NFCU + ",Transfer From Robert J Szabo -5818,,,750,,"),
 ]
 capitalone_test_data = [
     (["2024-02-07", "2024-02-09", "7278", "WENDY'S", "Dining", "13.52", ""],
